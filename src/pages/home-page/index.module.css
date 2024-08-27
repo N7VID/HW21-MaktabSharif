@@ -1,0 +1,13 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.main {
+  background-image: url("../../assets/images/laptop-wooden-table.jpg");
+  background-position: center calc(100vh - 58rem);
+  background-size: cover;
+  background-repeat: no-repeat;
+  cursor: default;
+}
