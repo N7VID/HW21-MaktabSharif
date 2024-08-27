@@ -1,0 +1,13 @@
+.main {
+  background-image: url("../../assets/images/a-book-1628732.jpg");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  cursor: default;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
