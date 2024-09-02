@@ -3,6 +3,7 @@ import { register } from "../api/register.api";
 
 export const useRegister = () => {
   return useMutation({
+    mutationKey: "Register",
     mutationFn: (data) => register(data),
     onSuccess: (data) => {
       console.log(data.message);
