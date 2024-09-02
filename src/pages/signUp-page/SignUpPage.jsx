@@ -6,8 +6,11 @@ import MuiButton from "../../components/MuiButton/MuiButton";
 import { Link } from "react-router-dom";
 import styles from "./index.module.css";
 import { schema } from "./schema";
+import { useRegister } from "../../hooks/useRegister";
 
 export default function SignUpPage() {
+  const { mutate } = useRegister();
+
   const {
     handleSubmit,
     formState: { errors },
@@ -15,7 +18,7 @@ export default function SignUpPage() {
   } = useForm({ resolver: zodResolver(schema) });
 
   function handleFormSubmit(value) {
-    console.log(value);
+    mutate(value);
   }
   return (
     <Stack
@@ -61,7 +64,7 @@ export default function SignUpPage() {
               label={"Phone"}
               errors={errors}
               register={register}
-              name={"phoneNumber"}
+              name={"phone"}
             />
             <MuiInput
               label={"Password"}

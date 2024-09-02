@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const schema = z.object({
-  phoneNumber: z
+  phone: z
     .string()
     .min(1, "Phone Number is required.")
     .regex(

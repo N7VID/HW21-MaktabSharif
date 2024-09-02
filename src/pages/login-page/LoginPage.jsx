@@ -62,7 +62,7 @@ export default function LoginPage() {
               label={"Phone"}
               errors={errors}
               register={register}
-              name={"phoneNumber"}
+              name={"phone"}
             />
             <MuiInput
               label={"Password"}
