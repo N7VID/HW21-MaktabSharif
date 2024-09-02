@@ -2,20 +2,32 @@ import { Box, Paper, Stack, Typography } from "@mui/material";
 import styles from "./index.module.css";
 import MuiInput from "../../components/MuiInput/MuiInput";
 import MuiButton from "../../components/MuiButton/MuiButton";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { schema } from "./schema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useLogin } from "../../hooks/useLogin";
 
 export default function LoginPage() {
+  const { mutate, isPending } = useLogin();
+  const navigate = useNavigate();
+
   const {
     handleSubmit,
     formState: { errors },
     register,
+    reset,
   } = useForm({ resolver: zodResolver(schema) });
 
   function handleFormSubmit(value) {
-    console.log(value);
+    mutate(value, {
+      onSuccess: (res) => {
+        navigate("/courses");
+        localStorage.setItem("accessToken", res.access);
+        localStorage.setItem("refreshToken", res.refresh);
+        reset();
+      },
+    });
   }
 
   return (
@@ -72,7 +84,7 @@ export default function LoginPage() {
               name={"password"}
             />
             <MuiButton type={"submit"} sx={{ width: "100%" }}>
-              Continue
+              {isPending ? "Loading..." : "Continue"}
             </MuiButton>
             <Link to={"/signUp"} style={{ textDecoration: "none" }}>
               <MuiButton
