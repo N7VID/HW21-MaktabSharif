@@ -1,8 +1,8 @@
 import axios from "axios";
-import { BASE_URL } from "../constants";
+import { URL } from "../constants";
 
 const httpRequest = axios.create({
-  baseURL: BASE_URL,
+  baseURL: URL.BASE,
   headers: {
     "Content-Type": "application/json",
   },
