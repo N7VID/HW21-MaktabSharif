@@ -1,3 +1,8 @@
+import { useGetCourses } from "../../hooks/useGetCourses";
+
 export default function ProductPage() {
-  return <div>ProductPage</div>;
+  const { data } = useGetCourses();
+  console.log(data);
+
+  return <div>hi</div>;
 }
