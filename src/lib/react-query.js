@@ -3,7 +3,7 @@ import { QueryClient } from "@tanstack/react-query";
 const client = new QueryClient({
   defaultOptions: {
     queries: {
-      retry: 2,
+      retry: 0,
       refetchOnWindowFocus: false,
       throwOnError: false,
       gcTime: 1000 * 60 * 60 * 24,
