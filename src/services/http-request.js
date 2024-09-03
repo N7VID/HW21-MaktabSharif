@@ -21,7 +21,7 @@ httpRequest.interceptors.response.use(
   (config) => {
     return config;
   },
-  async (error) => {
+  (error) => {
     const status = error.response.status;
     const originRequest = error.config;
     const refresh = localStorage.getItem("refreshToken");
@@ -35,8 +35,6 @@ httpRequest.interceptors.response.use(
         .catch((error) => {
           return Promise.reject(error);
         });
-    } else {
-      return Promise.reject(error);
     }
   }
 );
