@@ -17,7 +17,11 @@ export default function MuiInput({
       error={!!errors[name]}
       helperText={errors[name]?.message}
       type={type}
-      {...register(name)}
+      {...register(name, {
+        ...(type === "number" && {
+          setValueAs: (v) => (v === "" ? undefined : parseFloat(v)),
+        }),
+      })}
       {...props}
     />
   );
