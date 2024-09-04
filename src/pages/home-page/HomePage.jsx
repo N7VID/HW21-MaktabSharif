@@ -13,19 +13,20 @@ export default function HomePage() {
       justifyContent={"center"}
       alignItems={"center"}
     >
-      <Stack alignItems={"center"} gap={3}>
+      <Stack alignItems={"center"}>
         <Paper
           elevation={10}
           sx={{
-            gap: "25px",
-            padding: "40px",
+            gap: "30px",
+            px: "40px",
+            py: "60px",
             display: "flex",
             alignItems: "center",
             flexDirection: "column",
             justifyContent: "center",
           }}
         >
-          <Typography variant="h3" fontWeight={600} my={"10px"}>
+          <Typography variant="h3" my={"10px"}>
             Online Courses
           </Typography>
           <Stack>
@@ -41,7 +42,9 @@ export default function HomePage() {
               <MuiButton component={"a"}>Login</MuiButton>
             </Link>
             <Link to={"signUp"}>
-              <MuiButton component={"a"}>Sign up</MuiButton>
+              <MuiButton component={"a"} sx={{ width: "100%" }}>
+                Sign up
+              </MuiButton>
             </Link>
           </Stack>
         </Paper>

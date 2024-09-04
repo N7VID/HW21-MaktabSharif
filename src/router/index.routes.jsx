@@ -11,7 +11,11 @@ import { AppRoutes } from "../config/routes";
 const router = createBrowserRouter([
   {
     path: AppRoutes.HOME,
-    element: <HomePage />,
+    element: (
+      <ProtectedRoute>
+        <HomePage />
+      </ProtectedRoute>
+    ),
   },
   {
     path: AppRoutes.LOGIN,
