@@ -77,7 +77,15 @@ export default function ProductPage() {
             alignItems: "center",
           }}
         >
-          <MuiButton color={"warning"}>LogOut</MuiButton>
+          <MuiButton
+            color={"warning"}
+            onClick={() => {
+              localStorage.clear();
+              navigate("/");
+            }}
+          >
+            LogOut
+          </MuiButton>
           <Typography variant="h4">Courses</Typography>
           <MuiButton onClick={() => navigate("create")}>
             create course
