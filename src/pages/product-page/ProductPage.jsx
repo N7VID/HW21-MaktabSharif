@@ -4,6 +4,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import styles from "./index.module.css";
 import MuiButton from "../../components/MuiButton/MuiButton";
 import { useNavigate } from "react-router-dom";
+import { AppRoutes } from "../../config/routes";
 
 export default function ProductPage() {
   const { data, isLoading, error } = useGetCourses();
@@ -81,13 +82,13 @@ export default function ProductPage() {
             color={"warning"}
             onClick={() => {
               localStorage.clear();
-              navigate("/");
+              navigate(AppRoutes.HOME);
             }}
           >
             LogOut
           </MuiButton>
           <Typography variant="h4">Courses</Typography>
-          <MuiButton onClick={() => navigate("create")}>
+          <MuiButton onClick={() => navigate(AppRoutes.CREATE)}>
             create course
           </MuiButton>
         </Paper>

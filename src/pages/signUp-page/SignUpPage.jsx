@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import styles from "./index.module.css";
 import { schema } from "./schema";
 import { useRegister } from "../../hooks/useRegister";
+import { AppRoutes } from "../../config/routes";
 
 export default function SignUpPage() {
   const { mutate } = useRegister();
@@ -76,7 +77,7 @@ export default function SignUpPage() {
             <MuiButton type={"submit"} sx={{ width: "100%" }}>
               Create Account
             </MuiButton>
-            <Link to={"/login"} style={{ textDecoration: "none" }}>
+            <Link to={AppRoutes.LOGIN} style={{ textDecoration: "none" }}>
               <MuiButton
                 variant="text"
                 sx={{

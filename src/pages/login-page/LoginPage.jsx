@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { schema } from "./schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useLogin } from "../../hooks/useLogin";
+import { AppRoutes } from "../../config/routes";
 
 export default function LoginPage() {
   const { mutate, isPending } = useLogin();
@@ -22,7 +23,7 @@ export default function LoginPage() {
   function handleFormSubmit(value) {
     mutate(value, {
       onSuccess: (res) => {
-        navigate("/courses");
+        navigate(AppRoutes.COURSES);
         localStorage.setItem("accessToken", res.access);
         localStorage.setItem("refreshToken", res.refresh);
         reset();
@@ -86,7 +87,7 @@ export default function LoginPage() {
             <MuiButton type={"submit"} sx={{ width: "100%" }}>
               {isPending ? "Loading..." : "Continue"}
             </MuiButton>
-            <Link to={"/signUp"} style={{ textDecoration: "none" }}>
+            <Link to={AppRoutes.SIGNUP} style={{ textDecoration: "none" }}>
               <MuiButton
                 variant="text"
                 sx={{

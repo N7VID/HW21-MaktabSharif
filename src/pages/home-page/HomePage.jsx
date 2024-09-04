@@ -2,6 +2,7 @@ import { Paper, Stack, Typography } from "@mui/material";
 import MuiButton from "../../components/MuiButton/MuiButton";
 import styles from "./index.module.css";
 import { Link } from "react-router-dom";
+import { AppRoutes } from "../../config/routes";
 
 export default function HomePage() {
   return (
@@ -36,7 +37,7 @@ export default function HomePage() {
             </Typography>
           </Stack>
           <Stack spacing={2} direction={"row"}>
-            <Link to={"/login"}>
+            <Link to={AppRoutes.LOGIN}>
               <MuiButton component={"a"}>Login</MuiButton>
             </Link>
             <Link to={"signUp"}>

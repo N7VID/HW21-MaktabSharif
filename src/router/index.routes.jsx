@@ -6,14 +6,15 @@ import SignUpPage from "../pages/signUp-page/SignUpPage";
 import CreatePage from "../pages/create-page/CreatePage";
 import ProtectedRoute from "./ProtectedRoute.routes";
 import PrivateRoute from "./PrivateRoute.routes";
+import { AppRoutes } from "../config/routes";
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: AppRoutes.HOME,
     element: <HomePage />,
   },
   {
-    path: "/login",
+    path: AppRoutes.LOGIN,
     element: (
       <ProtectedRoute>
         <LoginPage />
@@ -21,7 +22,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/signUp",
+    path: AppRoutes.SIGNUP,
     element: (
       <ProtectedRoute>
         <SignUpPage />
@@ -29,7 +30,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/courses",
+    path: AppRoutes.COURSES,
     element: (
       <PrivateRoute>
         <Outlet />
@@ -41,7 +42,7 @@ const router = createBrowserRouter([
         element: <ProductPage />,
       },
       {
-        path: "create",
+        path: AppRoutes.CREATE,
         element: <CreatePage />,
       },
     ],
