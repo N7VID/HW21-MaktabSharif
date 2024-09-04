@@ -5,8 +5,13 @@ import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
 import { useContext } from "react";
 import { RootContext } from "../../context/RootContextProvider";
+import MuiButton from "../MuiButton/MuiButton";
 
 const style = {
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "Center",
+  alignItems: "Center",
   position: "absolute",
   top: "50%",
   left: "50%",
@@ -14,7 +19,9 @@ const style = {
   width: 400,
   bgcolor: "background.paper",
   border: "2px solid #000",
+  borderRadius: "10px",
   boxShadow: 24,
+  gap: "10px",
   p: 4,
 };
 
@@ -39,12 +46,34 @@ export default function MuiModal() {
       >
         <Fade in={true}>
           <Box sx={style}>
-            <Typography id="transition-modal-title" variant="h6" component="h2">
-              Text in a modal
+            <Typography
+              id="transition-modal-title"
+              variant="h5"
+              component="h2"
+              color={"red"}
+              borderBottom={1}
+            >
+              Attention
             </Typography>
-            <Typography id="transition-modal-description" sx={{ mt: 2 }}>
-              Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+            <Typography
+              id="transition-modal-description"
+              sx={{ mt: 2 }}
+            ></Typography>
+            <Typography
+              variant="subtitle1"
+              sx={{ marginBottom: 3, textAlign: "center" }}
+            >
+              Are you sure you want to delete <strong>Selected Course</strong>?
+              This action cannot be undone.
             </Typography>
+            <Box sx={{ display: "flex", justifyContent: "center", gap: 2 }}>
+              <MuiButton color="secondary" size="small" onClick={handleClose}>
+                Cancel
+              </MuiButton>
+              <MuiButton color="error" size="small" onClick={handleClose}>
+                Delete
+              </MuiButton>
+            </Box>
           </Box>
         </Fade>
       </Modal>
