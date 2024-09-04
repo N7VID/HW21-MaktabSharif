@@ -1,15 +1,17 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
+import RootContextProvider from "./context/RootContextProvider.jsx";
 import "./index.css";
+import Providers from "./providers/index.jsx";
 import router from "./router/index.routes.jsx";
-import { QueryClientProvider } from "@tanstack/react-query";
-import client from "./lib/react-query.js";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <QueryClientProvider client={client}>
-      <RouterProvider router={router} />
-    </QueryClientProvider>
+    <RootContextProvider>
+      <Providers>
+        <RouterProvider router={router} />
+      </Providers>
+    </RootContextProvider>
   </StrictMode>
 );

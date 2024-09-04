@@ -5,10 +5,13 @@ import styles from "./index.module.css";
 import MuiButton from "../../components/MuiButton/MuiButton";
 import { useNavigate } from "react-router-dom";
 import { AppRoutes } from "../../config/routes";
+import { useContext } from "react";
+import { RootContext } from "../../context/RootContextProvider";
 
 export default function ProductPage() {
   const { data, isLoading, error } = useGetCourses();
   const navigate = useNavigate();
+  const { setModal } = useContext(RootContext);
   const columns = [
     { field: "id", headerName: "ID", width: 100 },
     { field: "title", headerName: "Title", width: 150 },
@@ -62,7 +65,7 @@ export default function ProductPage() {
   };
 
   const handleDelete = (id) => {
-    console.log(`Delete clicked for id: ${id}`);
+    setModal(id);
   };
 
   const paginationModel = { page: 0, pageSize: 5 };
