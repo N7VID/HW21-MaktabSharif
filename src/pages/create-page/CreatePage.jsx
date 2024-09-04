@@ -1,22 +1,51 @@
-import { Paper, Stack, styled, Typography } from "@mui/material";
+import { Input, Paper, Stack, styled, Typography } from "@mui/material";
 import { TextareaAutosize as BaseTextareaAutosize } from "@mui/base/TextareaAutosize";
 import styles from "./index.module.css";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import MuiInput from "../../components/MuiInput/MuiInput";
 import MuiButton from "../../components/MuiButton/MuiButton";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { schema } from "./schema";
+import { usePostCourse } from "../../hooks/usePostCourse";
 
 export default function CreatePage() {
   const {
     handleSubmit,
     formState: { errors },
     register,
+    control,
+    watch,
   } = useForm({ resolver: zodResolver(schema) });
 
+  const { mutate, isPending } = usePostCourse();
+
+  const selectedFile = watch("images");
   function handleCreateFormSubmit(values) {
-    console.log(values);
+    const formData = new FormData();
+
+    formData.append("title", values.title);
+    formData.append("teacher", values.teacher);
+    formData.append("category", values.category);
+    formData.append("duration", values.duration);
+    formData.append("price", values.price);
+    formData.append("number_of_chapter", values.number_of_chapter);
+    formData.append("number_of_viewer", values.number_of_viewer);
+    formData.append("description", values.description);
+
+    if (selectedFile && selectedFile.length > 0) {
+      formData.append("images", selectedFile[0]);
+    }
+
+    console.log([...formData]);
+    console.log(selectedFile[0]);
+
+    try {
+      mutate(formData);
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    }
   }
+
   const blue = {
     100: "#DAECFF",
     200: "#b6daff",
@@ -98,6 +127,7 @@ export default function CreatePage() {
             size="small"
           />
           <MuiInput
+            type={"number"}
             label={"Category"}
             name={"category"}
             errors={errors}
@@ -124,7 +154,7 @@ export default function CreatePage() {
           <MuiInput
             type={"number"}
             label={"Chapters"}
-            name={"chapters"}
+            name={"number_of_chapter"}
             register={register}
             errors={errors}
             size="small"
@@ -132,20 +162,25 @@ export default function CreatePage() {
           <MuiInput
             type={"number"}
             label={"Viewers"}
-            name={"viewers"}
+            name={"number_of_viewer"}
             register={register}
             errors={errors}
             size="small"
           />
 
-          <MuiInput
-            type={"file"}
-            name={"file"}
-            register={register}
-            errors={errors}
-            size="small"
-            sx={{ width: 220 }}
-            inputProps={{ accept: "image/*" }}
+          <Controller
+            name="images"
+            control={control}
+            defaultValue={[]}
+            render={({ field }) => (
+              <Input
+                type={"file"}
+                size="small"
+                sx={{ width: 220 }}
+                inputProps={{ accept: "image/*" }}
+                onChange={(e) => field.onChange(e.target.files)}
+              />
+            )}
           />
           <TextareaAutosize
             minRows={1}
@@ -158,7 +193,7 @@ export default function CreatePage() {
             }}
           />
           <MuiButton type={"submit"} sx={{ width: "100%" }}>
-            Create
+            {isPending ? "Sending..." : "Create"}
           </MuiButton>
         </form>
       </Paper>
