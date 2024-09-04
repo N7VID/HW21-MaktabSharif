@@ -3,8 +3,10 @@ import Box from "@mui/material/Box";
 import Fade from "@mui/material/Fade";
 import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
+import { useQueryClient } from "@tanstack/react-query";
 import { useContext } from "react";
 import { RootContext } from "../../context/RootContextProvider";
+import { useDeleteCourse } from "../../hooks/useDeleteCourse";
 import MuiButton from "../MuiButton/MuiButton";
 
 const style = {
@@ -26,8 +28,18 @@ const style = {
 };
 
 export default function MuiModal() {
-  const { setModal } = useContext(RootContext);
+  const { setModal, modal } = useContext(RootContext);
   const handleClose = () => setModal(null);
+  const { mutate, isPending } = useDeleteCourse();
+  const queryClient = useQueryClient();
+  const handleDelete = () => {
+    mutate(modal, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["Courses"] });
+        setModal(null);
+      },
+    });
+  };
 
   return (
     <div>
@@ -70,8 +82,8 @@ export default function MuiModal() {
               <MuiButton color="secondary" size="small" onClick={handleClose}>
                 Cancel
               </MuiButton>
-              <MuiButton color="error" size="small" onClick={handleClose}>
-                Delete
+              <MuiButton color="error" size="small" onClick={handleDelete}>
+                {isPending ? "Deleting..." : "Delete"}
               </MuiButton>
             </Box>
           </Box>
