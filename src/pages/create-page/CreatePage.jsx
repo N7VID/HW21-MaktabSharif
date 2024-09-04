@@ -1,26 +1,29 @@
-import { Input, Paper, Stack, Typography } from "@mui/material";
-
-import styles from "./index.module.css";
-import { Controller, useForm } from "react-hook-form";
-import MuiInput from "../../components/MuiInput/MuiInput";
-import MuiButton from "../../components/MuiButton/MuiButton";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { schema } from "./schema";
-import { usePostCourse } from "../../hooks/usePostCourse";
+import { Paper, Stack, Typography } from "@mui/material";
+import { useForm } from "react-hook-form";
+import MuiButton from "../../components/MuiButton/MuiButton";
+import MuiInput from "../../components/MuiInput/MuiInput";
 import MuiTextArea from "../../components/MuiTextArea/MuiTextArea";
+import { usePostCourse } from "../../hooks/usePostCourse";
+import styles from "./index.module.css";
+import { schema } from "./schema";
+import { useNavigate } from "react-router-dom";
+import { AppRoutes } from "../../config/routes";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function CreatePage() {
   const {
     handleSubmit,
     formState: { errors },
     register,
-    control,
     watch,
+    reset,
   } = useForm({ resolver: zodResolver(schema) });
 
   const { mutate, isPending } = usePostCourse();
-
-  const selectedFile = watch("images");
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const selectedFile = watch("upload_images");
 
   function handleCreateFormSubmit(values) {
     const formData = new FormData();
@@ -34,17 +37,20 @@ export default function CreatePage() {
     formData.append("description", values.description);
 
     if (selectedFile && selectedFile.length > 0) {
-      formData.append("images", selectedFile[0]);
+      formData.append("upload_images", selectedFile[0]);
     }
+    // console.log(values);
 
-    console.log([...formData]);
-    console.log(selectedFile[0]);
-
-    try {
-      mutate(formData);
-    } catch (error) {
-      console.error("Error submitting form:", error);
-    }
+    mutate(formData, {
+      onSuccess: () => {
+        reset();
+        queryClient.invalidateQueries(["Courses"]);
+        navigate(AppRoutes.COURSES);
+      },
+      onError: (error) => {
+        console.error("Error submitting form:", error);
+      },
+    });
   }
 
   return (
@@ -79,7 +85,6 @@ export default function CreatePage() {
             register={register}
             size="small"
           />
-
           <MuiInput
             type={"number"}
             label={"Duration"}
@@ -112,19 +117,15 @@ export default function CreatePage() {
             errors={errors}
             size="small"
           />
-          <Controller
-            name="images"
-            control={control}
-            defaultValue={[]}
-            render={({ field }) => (
-              <Input
-                type={"file"}
-                size="small"
-                sx={{ width: 220 }}
-                inputProps={{ accept: "image/*" }}
-                onChange={(e) => field.onChange(e.target.files)}
-              />
-            )}
+          <MuiInput
+            type="file"
+            name="upload_images"
+            accept="image/*"
+            maxRows={1}
+            register={register}
+            sx={{
+              maxWidth: 220,
+            }}
           />
           <MuiTextArea
             maxRows={1}

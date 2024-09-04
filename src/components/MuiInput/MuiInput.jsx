@@ -6,7 +6,7 @@ export default function MuiInput({
   type,
   register,
   name,
-  errors,
+  errors = false,
   ...props
 }) {
   return (
