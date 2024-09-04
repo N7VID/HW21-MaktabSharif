@@ -3,9 +3,11 @@ import { useGetCourses } from "../../hooks/useGetCourses";
 import { DataGrid } from "@mui/x-data-grid";
 import styles from "./index.module.css";
 import MuiButton from "../../components/MuiButton/MuiButton";
+import { useNavigate } from "react-router-dom";
 
 export default function ProductPage() {
   const { data, isLoading, error } = useGetCourses();
+  const navigate = useNavigate();
   const columns = [
     { field: "id", headerName: "ID", width: 100 },
     { field: "title", headerName: "Title", width: 150 },
@@ -77,7 +79,9 @@ export default function ProductPage() {
         >
           <MuiButton color={"warning"}>LogOut</MuiButton>
           <Typography variant="h4">Courses</Typography>
-          <MuiButton>create course</MuiButton>
+          <MuiButton onClick={() => navigate("create")}>
+            create course
+          </MuiButton>
         </Paper>
         <Paper
           sx={{

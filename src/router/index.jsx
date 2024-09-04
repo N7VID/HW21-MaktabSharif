@@ -1,8 +1,9 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Outlet } from "react-router-dom";
 import HomePage from "../pages/home-page/HomePage";
 import LoginPage from "../pages/login-page/LoginPage";
 import ProductPage from "../pages/product-page/ProductPage";
 import SignUpPage from "../pages/signUp-page/SignUpPage";
+import CreatePage from "../pages/create-page/CreatePage";
 
 const router = createBrowserRouter([
   {
@@ -19,7 +20,17 @@ const router = createBrowserRouter([
   },
   {
     path: "/courses",
-    element: <ProductPage />,
+    element: <Outlet />,
+    children: [
+      {
+        index: true,
+        element: <ProductPage />,
+      },
+      {
+        path: "create",
+        element: <CreatePage />,
+      },
+    ],
   },
 ]);
 
