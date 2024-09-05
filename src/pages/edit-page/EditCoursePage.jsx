@@ -9,6 +9,8 @@ import styles from "./index.module.css";
 import { usePutCourse } from "../../hooks/usePutCourse";
 import { useQueryClient } from "@tanstack/react-query";
 import { AppRoutes } from "../../config/routes";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { schema } from "./schema";
 
 const fields = [
   "title",
@@ -31,7 +33,7 @@ export default function EditCoursePage() {
     setValue,
     reset,
     formState: { errors },
-  } = useForm();
+  } = useForm({ resolver: zodResolver(schema) });
 
   const navigate = useNavigate();
   const { mutate, isPending } = usePutCourse(id);
