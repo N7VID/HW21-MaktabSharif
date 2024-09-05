@@ -7,6 +7,7 @@ import CreatePage from "../pages/create-page/CreatePage";
 import ProtectedRoute from "./ProtectedRoute.routes";
 import PrivateRoute from "./PrivateRoute.routes";
 import { AppRoutes } from "../config/routes";
+import EditCoursePage from "../pages/edit-page/EditCoursePage";
 
 const router = createBrowserRouter([
   {
@@ -48,6 +49,10 @@ const router = createBrowserRouter([
       {
         path: AppRoutes.CREATE,
         element: <CreatePage />,
+      },
+      {
+        path: AppRoutes.EDIT,
+        element: <EditCoursePage />,
       },
     ],
   },

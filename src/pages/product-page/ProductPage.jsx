@@ -61,7 +61,7 @@ export default function ProductPage() {
     })) || [];
 
   const handleAction = (id) => {
-    console.log(`Action clicked for id: ${id}`);
+    navigate(`edit/${id}`);
   };
 
   const handleDelete = (id) => {
