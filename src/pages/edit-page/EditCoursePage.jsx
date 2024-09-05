@@ -1,11 +1,26 @@
 import { Box, Paper, Stack, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import MuiButton from "../../components/MuiButton/MuiButton";
 import MuiInput from "../../components/MuiInput/MuiInput";
 import MuiTextArea from "../../components/MuiTextArea/MuiTextArea";
 import { useGetSingleCourse } from "../../hooks/useGetSingleCourse";
 import styles from "./index.module.css";
+import { usePutCourse } from "../../hooks/usePutCourse";
+import { useQueryClient } from "@tanstack/react-query";
+import { AppRoutes } from "../../config/routes";
+
+const fields = [
+  "title",
+  "teacher",
+  "category",
+  "duration",
+  "price",
+  "number_of_chapter",
+  "number_of_viewer",
+  "upload_images",
+  "description",
+];
 
 export default function EditCoursePage() {
   const { id } = useParams();
@@ -14,22 +29,36 @@ export default function EditCoursePage() {
     register,
     handleSubmit,
     setValue,
+    reset,
     formState: { errors },
   } = useForm();
 
-  function handleEditFormSubmit(values) {
-    console.log(values);
+  const navigate = useNavigate();
+  const { mutate, isPending } = usePutCourse(id);
+  const queryClient = useQueryClient();
+
+  for (const field of fields) {
+    setValue(field, data?.[field]);
   }
 
-  setValue("title", data?.title);
-  setValue("teacher", data?.teacher);
-  setValue("category", data?.category);
-  setValue("duration", data?.duration);
-  setValue("price", data?.price);
-  setValue("number_of_chapter", data?.number_of_chapter);
-  setValue("number_of_viewer", data?.number_of_viewer);
-  setValue("upload_images", data?.upload_images);
-  setValue("description", data?.description);
+  function handleEditFormSubmit(values) {
+    const formData = new FormData();
+
+    for (const field of fields) {
+      formData.append(field, values?.[field]);
+    }
+
+    mutate(formData, {
+      onSuccess: () => {
+        reset();
+        queryClient.invalidateQueries(["Courses"]);
+        navigate(AppRoutes.COURSES);
+      },
+      onError: (error) => {
+        console.error("Error submitting form:", error);
+      },
+    });
+  }
 
   return (
     <Stack className={styles.main}>
@@ -120,8 +149,7 @@ export default function EditCoursePage() {
               }}
             />
             <MuiButton type={"submit"} sx={{ width: "100%" }}>
-              {/* { "" ? "Sending..." : "Create"} */}
-              submit
+              {isPending ? "Editing..." : "Submit"}
             </MuiButton>
           </form>
         )}
