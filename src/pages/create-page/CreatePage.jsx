@@ -7,9 +7,6 @@ import MuiTextArea from "../../components/MuiTextArea/MuiTextArea";
 import { usePostCourse } from "../../hooks/usePostCourse";
 import styles from "./index.module.css";
 import { schema } from "./schema";
-import { useNavigate } from "react-router-dom";
-import { AppRoutes } from "../../config/routes";
-import { useQueryClient } from "@tanstack/react-query";
 
 export default function CreatePage() {
   const {
@@ -17,12 +14,10 @@ export default function CreatePage() {
     formState: { errors },
     register,
     watch,
-    reset,
   } = useForm({ resolver: zodResolver(schema) });
 
   const { mutate, isPending } = usePostCourse();
-  const navigate = useNavigate();
-  const queryClient = useQueryClient();
+
   const selectedFile = watch("upload_images");
 
   function handleCreateFormSubmit(values) {
@@ -41,16 +36,7 @@ export default function CreatePage() {
     }
     // console.log(values);
 
-    mutate(formData, {
-      onSuccess: () => {
-        reset();
-        queryClient.invalidateQueries(["Courses"]);
-        navigate(AppRoutes.COURSES);
-      },
-      onError: (error) => {
-        console.error("Error submitting form:", error);
-      },
-    });
+    mutate(formData);
   }
 
   return (

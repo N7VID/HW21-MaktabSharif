@@ -3,7 +3,6 @@ import Box from "@mui/material/Box";
 import Fade from "@mui/material/Fade";
 import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
-import { useQueryClient } from "@tanstack/react-query";
 import { useContext } from "react";
 import { RootContext } from "../../context/RootContextProvider";
 import { useDeleteCourse } from "../../hooks/useDeleteCourse";
@@ -31,14 +30,8 @@ export default function MuiModal() {
   const { setModal, modal } = useContext(RootContext);
   const handleClose = () => setModal(null);
   const { mutate, isPending } = useDeleteCourse();
-  const queryClient = useQueryClient();
   const handleDelete = () => {
-    mutate(modal, {
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ["Courses"] });
-        setModal(null);
-      },
-    });
+    mutate(modal);
   };
 
   return (

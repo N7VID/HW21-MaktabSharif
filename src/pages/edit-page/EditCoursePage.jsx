@@ -1,15 +1,13 @@
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Box, Paper, Stack, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import MuiButton from "../../components/MuiButton/MuiButton";
 import MuiInput from "../../components/MuiInput/MuiInput";
 import MuiTextArea from "../../components/MuiTextArea/MuiTextArea";
 import { useGetSingleCourse } from "../../hooks/useGetSingleCourse";
-import styles from "./index.module.css";
 import { usePutCourse } from "../../hooks/usePutCourse";
-import { useQueryClient } from "@tanstack/react-query";
-import { AppRoutes } from "../../config/routes";
-import { zodResolver } from "@hookform/resolvers/zod";
+import styles from "./index.module.css";
 import { schema } from "./schema";
 
 const fields = [
@@ -31,13 +29,10 @@ export default function EditCoursePage() {
     register,
     handleSubmit,
     setValue,
-    reset,
     formState: { errors },
   } = useForm({ resolver: zodResolver(schema) });
 
-  const navigate = useNavigate();
   const { mutate, isPending } = usePutCourse(id);
-  const queryClient = useQueryClient();
 
   for (const field of fields) {
     setValue(field, data?.[field]);
@@ -50,16 +45,7 @@ export default function EditCoursePage() {
       formData.append(field, values?.[field]);
     }
 
-    mutate(formData, {
-      onSuccess: () => {
-        reset();
-        queryClient.invalidateQueries(["Courses"]);
-        navigate(AppRoutes.COURSES);
-      },
-      onError: (error) => {
-        console.error("Error submitting form:", error);
-      },
-    });
+    mutate(formData);
   }
 
   return (

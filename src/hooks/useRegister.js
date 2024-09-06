@@ -1,15 +1,16 @@
 import { useMutation } from "@tanstack/react-query";
 import { register } from "../api/register.api";
+import { toast } from "react-toastify";
 
 export const useRegister = () => {
   return useMutation({
     mutationKey: "Register",
     mutationFn: (data) => register(data),
     onSuccess: (data) => {
-      console.log(data.message);
+      toast(data.message, { type: "success" });
     },
     onError: (error) => {
-      console.log(`error: ${error.response.data.phone || error}`);
+      toast(`error: ${error.response.data.phone || error}`, { type: "error" });
     },
   });
 };

@@ -1,34 +1,25 @@
-import { Box, Paper, Stack, Typography } from "@mui/material";
-import styles from "./index.module.css";
-import MuiInput from "../../components/MuiInput/MuiInput";
-import MuiButton from "../../components/MuiButton/MuiButton";
-import { Link, useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
-import { schema } from "./schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useLogin } from "../../hooks/useLogin";
+import { Box, Paper, Stack, Typography } from "@mui/material";
+import { useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
+import MuiButton from "../../components/MuiButton/MuiButton";
+import MuiInput from "../../components/MuiInput/MuiInput";
 import { AppRoutes } from "../../config/routes";
+import { useLogin } from "../../hooks/useLogin";
+import styles from "./index.module.css";
+import { schema } from "./schema";
 
 export default function LoginPage() {
   const { mutate, isPending } = useLogin();
-  const navigate = useNavigate();
 
   const {
     handleSubmit,
     formState: { errors },
     register,
-    reset,
   } = useForm({ resolver: zodResolver(schema) });
 
   function handleFormSubmit(value) {
-    mutate(value, {
-      onSuccess: (res) => {
-        navigate(AppRoutes.COURSES);
-        localStorage.setItem("accessToken", res.access);
-        localStorage.setItem("refreshToken", res.refresh);
-        reset();
-      },
-    });
+    mutate(value);
   }
 
   return (
