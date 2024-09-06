@@ -1,26 +1,24 @@
 import { Box, Paper, Stack, Typography } from "@mui/material";
-import { useGetCourses } from "../../hooks/useGetCourses";
 import { DataGrid } from "@mui/x-data-grid";
-import styles from "./index.module.css";
-import MuiButton from "../../components/MuiButton/MuiButton";
-import { useNavigate } from "react-router-dom";
-import { AppRoutes } from "../../config/routes";
 import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import MuiButton from "../../components/MuiButton/MuiButton";
+import { AppRoutes } from "../../config/routes";
 import { RootContext } from "../../context/RootContextProvider";
+import { useGetCourses } from "../../hooks/useGetCourses";
+import styles from "./index.module.css";
 
 export default function ProductPage() {
-  const { data, isLoading, error } = useGetCourses();
+  const { params, setParams, setModal } = useContext(RootContext);
+  const { data, isLoading, error } = useGetCourses(params);
+  const { page, limit } = params;
   const navigate = useNavigate();
-  const { setModal } = useContext(RootContext);
+
   const columns = [
     { field: "id", headerName: "ID", width: 100 },
     { field: "title", headerName: "Title", width: 150 },
     { field: "teacher", headerName: "Teacher", width: 200 },
-    {
-      field: "category",
-      headerName: "Category",
-      width: 160,
-    },
+    { field: "category", headerName: "Category", width: 150 },
     {
       field: "actions",
       headerName: "Actions",
@@ -68,7 +66,23 @@ export default function ProductPage() {
     setModal(id);
   };
 
-  const paginationModel = { page: 0, pageSize: 5 };
+  const handleSortModel = (newModel) => {
+    if (newModel.length > 0) {
+      const { field, sort } = newModel[0];
+      setParams((prev) => ({
+        ...prev,
+        sort: field,
+        order: sort,
+      }));
+    } else {
+      setParams((prev) => ({
+        ...prev,
+        sort: undefined,
+        order: undefined,
+      }));
+    }
+  };
+
   return (
     <div className={styles.main}>
       <Stack className={styles.table} spacing={2}>
@@ -92,7 +106,7 @@ export default function ProductPage() {
           </MuiButton>
           <Typography variant="h4">Courses</Typography>
           <MuiButton onClick={() => navigate(AppRoutes.CREATE)}>
-            create course
+            Create Course
           </MuiButton>
         </Paper>
         <Paper
@@ -106,19 +120,34 @@ export default function ProductPage() {
             width: 800,
           }}
         >
-          {isLoading ? (
-            <Typography variant="subtitle1">Loading...</Typography>
-          ) : error ? (
+          {error ? (
             <Typography variant="subtitle1">
               An error occurred: {error.message}
             </Typography>
           ) : (
             <DataGrid
               rows={rows}
+              loading={isLoading}
               columns={columns}
+              pagination
+              sortingMode="server"
+              paginationMode="server"
               hideFooterSelectedRowCount
-              initialState={{ pagination: { paginationModel } }}
-              pageSizeOptions={[5, 10]}
+              onSortModelChange={handleSortModel}
+              initialState={{
+                pagination: {
+                  paginationModel: { pageSize: limit, page: page },
+                },
+              }}
+              rowCount={data?.count}
+              onPaginationModelChange={(newModel) => {
+                setParams((prev) => ({
+                  ...prev,
+                  page: newModel.page + 1,
+                  limit: newModel.pageSize,
+                }));
+              }}
+              pageSizeOptions={[3, 5, 10]}
               sx={{ border: 0 }}
             />
           )}
